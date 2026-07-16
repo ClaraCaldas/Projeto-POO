@@ -13,9 +13,7 @@ void share_content(const sharable& s) {
 int main() {
     std::cout << "--- INICIANDO SISTEMA DE TESTES (POO TP2) ---\n\n";
 
-    // ==========================================
     // QUESTÃO 1: Hierarquia de Herança
-    // ==========================================
     std::cout << "=== QUESTÃO 1: Hierarquia de Herança ===\n";
     std::cout << "Demonstrando a cadeia de destrutores virtuais (Q1-C):\n";
     {
@@ -24,9 +22,7 @@ int main() {
     }
     std::cout << "==========================================\n\n";
 
-    // ==========================================
     // QUESTÃO 2: Polimorfismo Dinâmico
-    // ==========================================
     std::cout << "=== QUESTÃO 2: Polimorfismo Dinâmico ===\n";
     {
         // Q2(A) vector<unique_ptr<Base>> usando make_unique
@@ -57,9 +53,7 @@ int main() {
     }
     std::cout << "==========================================\n\n";
 
-    // ==========================================
     // QUESTÃO 3: Interfaces Puras e Herança Avançada
-    // ==========================================
     std::cout << "=== QUESTÃO 3: Interfaces e Herança Avançada ===\n";
     {
         // Q3(D) Demonstrar o uso de interface pura passando por referência
@@ -74,9 +68,7 @@ int main() {
     }
     std::cout << "==========================================\n\n";
 
-    // ==========================================
     // COMPORTAMENTO ORIGINAL DO TP1 (Preservado)
-    // ==========================================
     std::cout << "=== FUNCIONALIDADES PRESERVADAS DO TP1 ===\n";
     auto song1 = std::make_shared<song>("Bohemian Rhapsody", "Queen", 354);
     auto song2 = std::make_shared<song>("Stairway to Heaven", "Led Zeppelin", 482);
