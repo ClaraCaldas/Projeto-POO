@@ -5,25 +5,80 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <ostream>
 
-class song {
-private:
+// Global log to track destruction order programmatically in tests
+inline std::vector<std::string> test_destruction_log;
+
+// Q3(A) Pure Interface
+class sharable {
+public:
+    virtual void share(std::ostream& os = std::cout) const = 0;
+    virtual ~sharable() = default;
+};
+
+// Q1(A) Abstract Base Class
+class media_content {
+protected:
     std::string title_;
-    std::string artist_;
     int duration_seconds_;
 
 public:
-    song(std::string title, std::string artist, int duration_seconds)
-        : title_(title), artist_(artist), duration_seconds_(duration_seconds) {
-        std::cout << "[song] Criada: " << title_ << "\n";
+    media_content(std::string title, int duration_seconds)
+        : title_(title), duration_seconds_(duration_seconds) {
+        std::cout << "[media_content] Criado: " << title_ << "\n";
     }
 
-    ~song() {
-        std::cout << "[song] ~Destruida: " << title_ << "\n";
+    // Q1(A) Virtual Destructor
+    virtual ~media_content() {
+        std::cout << "[media_content] ~Destruido: " << title_ << "\n";
+        test_destruction_log.push_back("media_content");
     }
 
     std::string title() const { return title_; }
     int duration_seconds() const { return duration_seconds_; }
+
+    // Q1(A) Pure Virtual Method
+    virtual float calcular() const = 0;
+
+    // Q1(A) Non-pure Virtual Method with default implementation
+    virtual void exibir() const {
+        std::cout << "Conteúdo: " << title_ << " (" << duration_seconds_ << "s)";
+    }
+};
+
+// Q1(B) Concrete Derived Class song inheriting from media_content and Q3(B) from sharable interface
+class song : public media_content, public sharable {
+private:
+    std::string artist_;
+
+public:
+    song(std::string title, std::string artist, int duration_seconds)
+        : media_content(title, duration_seconds), artist_(artist) {
+        std::cout << "[song] Criada: " << title_ << "\n";
+    }
+
+    // Q1(C) Destructor logging for chain check
+    ~song() override {
+        std::cout << "[song] ~Destruida: " << title_ << "\n";
+        test_destruction_log.push_back("song");
+    }
+
+    // Q1(B) Override of pure virtual method
+    float calcular() const override {
+        return duration_seconds_ * 1.5f;
+    }
+
+    // Q1(B) Override of non-pure virtual calling Base::metodo()
+    void exibir() const override {
+        media_content::exibir(); // Chama a versão da base
+        std::cout << " por " << artist_ << "\n";
+    }
+
+    // Q3(B) Interface implementation
+    void share(std::ostream& os = std::cout) const override {
+        os << "Compartilhando música: '" << title_ << "' por " << artist_;
+    }
 
     void play() const {
         int minutes = duration_seconds_ / 60;
@@ -33,7 +88,37 @@ public:
     }
 };
 
-class playlist {
+// Q1(B) Second Concrete Derived Class (Q3(C) marked final)
+class podcast final : public media_content {
+private:
+    std::string host_;
+    int episodes_count_;
+
+public:
+    podcast(std::string title, std::string host, int duration_seconds, int episodes_count)
+        : media_content(title, duration_seconds), host_(host), episodes_count_(episodes_count) {
+        std::cout << "[podcast] Criado: " << title_ << "\n";
+    }
+
+    ~podcast() override {
+        std::cout << "[podcast] ~Destruido: " << title_ << "\n";
+        test_destruction_log.push_back("podcast");
+    }
+
+    // Q1(B) Override of pure virtual method
+    float calcular() const override {
+        return duration_seconds_ * 0.8f + episodes_count_ * 10.0f;
+    }
+
+    // Q1(B) Override of virtual method
+    void exibir() const override {
+        std::cout << "🎙 Podcast: " << title_ << " apresentado por " << host_ 
+                  << " (" << duration_seconds_ << "s, " << episodes_count_ << " episódios)\n";
+    }
+};
+
+// Q3(B) Concrete class inheriting from interface
+class playlist : public sharable {
 private:
     std::string name_;
     std::vector<std::shared_ptr<song>> songs_; // Agregação
@@ -60,6 +145,11 @@ public:
             total += s->duration_seconds();
         }
         return total;
+    }
+
+    // Q3(B) Interface implementation
+    void share(std::ostream& os = std::cout) const override {
+        os << "Compartilhando playlist: '" << name_ << "' com " << songs_.size() << " músicas";
     }
 };
 
@@ -108,5 +198,16 @@ public:
         std::cout << "===========================\n";
     }
 };
+
+inline const media_content* maior_valor(const std::vector<std::unique_ptr<media_content>>& itens) {
+    if (itens.empty()) return nullptr;
+    const media_content* maior = itens[0].get();
+    for (const auto& item : itens) {
+        if (item->calcular() > maior->calcular()) {
+            maior = item.get();
+        }
+    }
+    return maior;
+}
 
 #endif

@@ -1,0 +1,13 @@
+# Build directories
+meu-projeto/build/
+build/
+
+# IDE files
+.vscode/
+.vs/
+*.user
+*.suo
+
+# Operating system files
+.DS_Store
+Thumbs.db
