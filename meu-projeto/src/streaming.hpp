@@ -7,17 +7,17 @@
 #include <memory>
 #include <ostream>
 
-// Global log to track destruction order programmatically in tests
+// Log global para rastrear a ordem de destruição programaticamente nos testes
 inline std::vector<std::string> test_destruction_log;
 
-// Q3(A) Pure Interface
+// Q3(A) Interface Pura
 class sharable {
 public:
     virtual void share(std::ostream& os = std::cout) const = 0;
     virtual ~sharable() = default;
 };
 
-// Q1(A) Abstract Base Class
+// Q1(A) Classe Base Abstrata
 class media_content {
 protected:
     std::string title_;
@@ -29,7 +29,7 @@ public:
         std::cout << "[media_content] Criado: " << title_ << "\n";
     }
 
-    // Q1(A) Virtual Destructor
+    // Q1(A) Destrutor Virtual
     virtual ~media_content() {
         std::cout << "[media_content] ~Destruido: " << title_ << "\n";
         test_destruction_log.push_back("media_content");
@@ -38,16 +38,16 @@ public:
     std::string title() const { return title_; }
     int duration_seconds() const { return duration_seconds_; }
 
-    // Q1(A) Pure Virtual Method
+    // Q1(A) Método Virtual Puro
     virtual float calcular() const = 0;
 
-    // Q1(A) Non-pure Virtual Method with default implementation
+    // Q1(A) Método Virtual não-puro com implementação padrão
     virtual void exibir() const {
         std::cout << "Conteúdo: " << title_ << " (" << duration_seconds_ << "s)";
     }
 };
 
-// Q1(B) Concrete Derived Class song inheriting from media_content and Q3(B) from sharable interface
+// Q1(B) Classe Derivada Concreta song herdando de media_content e Q3(B) da interface sharable
 class song : public media_content, public sharable {
 private:
     std::string artist_;
@@ -58,24 +58,24 @@ public:
         std::cout << "[song] Criada: " << title_ << "\n";
     }
 
-    // Q1(C) Destructor logging for chain check
+    // Q1(C) Registro de destrutor para verificação de encadeamento
     ~song() override {
         std::cout << "[song] ~Destruida: " << title_ << "\n";
         test_destruction_log.push_back("song");
     }
 
-    // Q1(B) Override of pure virtual method
+    // Q1(B) Sobrescrita do método virtual puro
     float calcular() const override {
         return duration_seconds_ * 1.5f;
     }
 
-    // Q1(B) Override of non-pure virtual calling Base::metodo()
+    // Q1(B) Sobrescrita de método virtual não-puro chamando Base::metodo()
     void exibir() const override {
         media_content::exibir(); // Chama a versão da base
         std::cout << " por " << artist_ << "\n";
     }
 
-    // Q3(B) Interface implementation
+    // Q3(B) Implementação da interface
     void share(std::ostream& os = std::cout) const override {
         os << "Compartilhando música: '" << title_ << "' por " << artist_;
     }
@@ -88,7 +88,7 @@ public:
     }
 };
 
-// Q1(B) Second Concrete Derived Class (Q3(C) marked final)
+// Q1(B) Segunda Classe Derivada Concreta (Q3(C) marcada como final)
 class podcast final : public media_content {
 private:
     std::string host_;
@@ -105,19 +105,19 @@ public:
         test_destruction_log.push_back("podcast");
     }
 
-    // Q1(B) Override of pure virtual method
+    // Q1(B) Sobrescrita de método virtual puro
     float calcular() const override {
         return duration_seconds_ * 0.8f + episodes_count_ * 10.0f;
     }
 
-    // Q1(B) Override of virtual method
+    // Q1(B) Sobrescrita de método virtual
     void exibir() const override {
         std::cout << "🎙 Podcast: " << title_ << " apresentado por " << host_ 
                   << " (" << duration_seconds_ << "s, " << episodes_count_ << " episódios)\n";
     }
 };
 
-// Q3(B) Concrete class inheriting from interface
+// Q3(B) Classe concreta herdando da interface
 class playlist : public sharable {
 private:
     std::string name_;
@@ -147,7 +147,7 @@ public:
         return total;
     }
 
-    // Q3(B) Interface implementation
+    // Q3(B) Implementação da interface
     void share(std::ostream& os = std::cout) const override {
         os << "Compartilhando playlist: '" << name_ << "' com " << songs_.size() << " músicas";
     }

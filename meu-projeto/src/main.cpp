@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-// Q3(D) Free function receiving const sharable& (without knowing concrete type)
+// Q3(D) Função livre recebendo const sharable& (sem conhecer o tipo concreto)
 void share_content(const sharable& s) {
     std::cout << "  [share_content] ";
     s.share(std::cout);
@@ -29,12 +29,12 @@ int main() {
     // ==========================================
     std::cout << "=== QUESTÃO 2: Polimorfismo Dinâmico ===\n";
     {
-        // Q2(A) vector<unique_ptr<Base>> using make_unique
+        // Q2(A) vector<unique_ptr<Base>> usando make_unique
         std::vector<std::unique_ptr<media_content>> itens;
         itens.push_back(std::make_unique<song>("Stairway to Heaven", "Led Zeppelin", 482));
         itens.push_back(std::make_unique<podcast>("DevCast #42", "Marcos e Ana", 3600, 15));
 
-        // Q2(B) Iterate with const auto& calling at least 2 methods via base pointer
+        // Q2(B) Iterar com const auto& chamando pelo menos 2 métodos via ponteiro da base
         std::cout << "Iterando itens no vetor polimórfico:\n";
         for (const auto& item : itens) {
             item->exibir(); // Primeiro método polimórfico
@@ -42,7 +42,7 @@ int main() {
         }
         std::cout << "\n";
 
-        // Q2(D) Free function maior_valor
+        // Q2(D) Função livre maior_valor
         std::cout << "Buscando o elemento com maior valor de calcular():\n";
         const media_content* maior = maior_valor(itens);
         if (maior) {
@@ -52,7 +52,7 @@ int main() {
         }
         std::cout << "\n";
 
-        // Q2(C) Demonstrating correct destruction when leaving vector scope
+        // Q2(C) Demonstrando a destruição correta ao sair do escopo do vetor
         std::cout << "Destruindo o vetor de itens polimórficos:\n";
     }
     std::cout << "==========================================\n\n";
@@ -62,7 +62,7 @@ int main() {
     // ==========================================
     std::cout << "=== QUESTÃO 3: Interfaces e Herança Avançada ===\n";
     {
-        // Q3(D) Demonstrate pure interface usage by passing by reference
+        // Q3(D) Demonstrar o uso de interface pura passando por referência
         song song_item("Imagine", "John Lennon", 183);
         playlist playlist_item("Melhores do Pop");
         
