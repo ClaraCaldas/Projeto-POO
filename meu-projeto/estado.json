@@ -1,0 +1,27 @@
+{
+    "itens": [
+        {
+            "artist": "John Lennon",
+            "duration_seconds": 183,
+            "id": 1,
+            "title": "Imagine",
+            "type": "song"
+        },
+        {
+            "duration_seconds": 1200,
+            "episodes_count": 5,
+            "host": "Developer",
+            "id": 2,
+            "title": "Podcast Tech",
+            "type": "podcast"
+        },
+        {
+            "artist": "Artist Pop",
+            "duration_seconds": 200,
+            "id": 3,
+            "title": "Song Pop",
+            "type": "song"
+        }
+    ],
+    "version": 1
+}
